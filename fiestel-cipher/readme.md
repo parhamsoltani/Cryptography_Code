@@ -46,3 +46,24 @@ main.c - Example usage and testing
   - `decrypt_block()`: Single block decryption
   - `encrypt_cbc()`: CBC mode encryption
   - `decrypt_cbc()`: CBC mode decryption
+
+## Usage
+
+```c
+// Initialize key schedule
+FeistelKey key_schedule;
+uint8_t key[KEY_SIZE] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
+initialize_key(&key_schedule, key);
+
+// Prepare data
+uint8_t iv[BLOCK_SIZE] = {0}; // Initialization Vector
+uint8_t plaintext[] = "Hello, World!";
+size_t data_len = strlen((char*)plaintext);
+
+// Encrypt data
+uint8_t* ciphertext = malloc(padded_length);
+encrypt_cbc(&key_schedule, iv, plaintext, data_len, ciphertext);
+
+// Decrypt data
+uint8_t* decrypted = malloc(padded_length);
+decrypt_cbc(&key_schedule, iv, ciphertext, padded_length, decrypted);
