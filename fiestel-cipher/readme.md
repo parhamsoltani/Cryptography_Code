@@ -50,6 +50,9 @@ main.c - Example usage and testing
 ## Usage
 
 ```c
+
+#include "feistel.h"
+
 // Initialize key schedule
 FeistelKey key_schedule;
 uint8_t key[KEY_SIZE] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
@@ -61,9 +64,47 @@ uint8_t plaintext[] = "Hello, World!";
 size_t data_len = strlen((char*)plaintext);
 
 // Encrypt data
+size_t padded_length = ((data_len / BLOCK_SIZE) + 1) * BLOCK_SIZE;
 uint8_t* ciphertext = malloc(padded_length);
 encrypt_cbc(&key_schedule, iv, plaintext, data_len, ciphertext);
 
 // Decrypt data
 uint8_t* decrypted = malloc(padded_length);
 decrypt_cbc(&key_schedule, iv, ciphertext, padded_length, decrypted);
+
+// Clean up
+free(ciphertext);
+free(decrypted);
+```
+
+## Security Considerations
+
+This implementation is for **educational purposes only** and has not undergone formal cryptographic review.
+
+### Important Notes:
+- The key size (**64 bits**) is insufficient for modern security standards.
+- For production systems, use established cryptographic libraries like [OpenSSL](https://www.openssl.org/).
+
+---
+
+## Building and Testing
+
+To compile and run the implementation:
+
+### Compile:
+```bash
+gcc -o feistel main.c feistel.c -Wall -Wextra -O2
+```
+
+### Run:
+```bash
+./feistel
+```
+## Dependencies
+- Standard C library
+- C99 compatible compiler
+---
+
+>Disclaimer:
+>This implementation is intended for educational purposes only.
+>Do not use it in production systems without thorough security review and modifications.
