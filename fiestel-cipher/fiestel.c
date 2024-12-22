@@ -1,4 +1,3 @@
-// feistel.c
 #include "feistel.h"
 #include <time.h>
 
